@@ -1,0 +1,14 @@
+data: 
+  s3_bucket: "breast-cancer-data--eun1-az1--x-s3"
+  raw_data_path: "s3://your-bucket-name/raw_data/data.zip"
+  processed_data_path: "s3://breast-cancer-data--eun1-az1--x-s3/breast_ultrasound_images.zip"
+  train_split_path: "s3://your-bucket-name/final_data/train"
+  test_split_path: "s3://your-bucket-name/final_data/test"
+
+preprocessing: 
+  unzip: true
+  remove_duplicates: true
+  normalization: true
+  train_test_split: 
+    test_size: 0.2
+    random_state: 42

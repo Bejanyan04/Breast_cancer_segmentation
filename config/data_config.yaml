@@ -1,0 +1,14 @@
+data:
+  raw_data_path: 'data\\raw_data'
+  zip_file_path: 'data\\raw_data\\breast_ultrasound_images.zip'
+  unzip_folder: 'data\\raw_data'
+  annotations_path:  'data\\raw_data\\processed_data\\annotations'
+  images_path: 'data\\processed_data\\images'
+  train_data_path: 'data\\final_data\\train'
+  test_data_path:  'data\\final_data\\test'
+  val_data_path:   'data\\final_data\\val'
+
+  split_random_seed : 42
+  train_ratio: 0.8
+  test_ratio: 0.1
+  val_ratio: 0.1

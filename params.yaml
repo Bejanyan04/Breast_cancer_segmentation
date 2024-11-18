@@ -1,0 +1,62 @@
+
+model:
+    model_name: UnetPlusPlus
+    encoder_name: resnet34        # You can choose other backbones like "efficientnet-b0", "mobilenet_v2", etc.
+    encoder_weights: imagenet     # Use "imagenet" pretrained weights for the encoder
+    in_channels: 3                # Number of input channels (e.g., 3 for RGB images)
+    classes: 3     
+    activation:
+        type: Softmax
+        parameters:
+            dim: 1  
+
+
+training:
+    augmentation:
+        resize:
+            height: 256
+            width: 256
+            probability: 1.0     # Always apply resizing
+
+        horizontal_flip:
+            probability: 0.5     # Probability for horizontal flip
+
+        vertical_flip:
+            probability: 0.3     # Probability for vertical flip
+
+        random_rotate_90:
+            probability: 0.5     # Probability for 90-degree rotation
+
+        shift_scale_rotate:
+            shift_limit: 0.02    # Limit for shift transformation
+            scale_limit: 0.02    # Limit for scale transformation
+            rotate_limit: 5      # Limit for rotation in degrees
+            probability: 0.1     # Probability for shift, scale, rotate transformation
+
+    normalize:
+        function: trivial_normalize
+        apply_always: true
+
+    transform_settings:
+        to_tensor: true       
+    
+    batch_size: 8
+    num_epochs: 20
+    device : cpu
+
+loss_function:
+  type: CrossEntropyLoss
+ 
+optimizer:
+  type: Adam
+  parameters:
+    lr: 0.001
+    weight_decay: 0.0001
+
+inference:
+    batch_size: 1
+    model_path: None
+    metrics:
+        reduction: micro-imagewise
+    device: cpu
+    

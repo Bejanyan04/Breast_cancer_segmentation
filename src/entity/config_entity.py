@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Optional, Dict, Any, List
 
 
 @dataclass(frozen=True)
@@ -22,45 +23,90 @@ class DataIngestionConfig:
     val_ratio: float
         
  
-@dataclass(frozen=True)
-class PrepareBaseModelConfig:
-    root_dir: Path
-    
-    base_model_path: Path
-    updated_base_model_path: Path
-    params_image_size: list
-    params_learning_rate: float
-    params_include_top: bool
-    params_weights: str
-    params_classes: int
+@dataclass 
+class resize:
+    probability: str
+    height: str
+    width: str
+
+@dataclass
+class  horizontal_flip:
+    probability: float
+
+@dataclass 
+class vertical_flip:
+    probability : float
+
+@dataclass 
+class random_rotate90:
+    probability : float
+
+@dataclass
+class shift_scale_rotate:
+    shift_limit: float
+    scale_limit: float
+    rotate_limit: float
+    probability: float
+
+@dataclass
+class activation:
+    type: str
+    dim: int
+
+@dataclass 
+class normalize:
+    function: str
+    apply_always: bool
+
+@dataclass
+class transform_settings:
+    to_tensor: bool
 
 
+@dataclass 
+class Model:
+    activation: activation
+    model_name: str
+    encoder_name:str
+    encoder_weights: str
+    in_channels: int
+    classes: int
 
-@dataclass(frozen=True)
-class PrepareCallbacksConfig:
-    root_dir: Path
-    tensorboard_root_log_dir: Path
-    checkpoint_model_filepath: Path
+     
+@dataclass
+class TrainAugmentation:
+    resize: resize
+    horizontal_flip: horizontal_flip
+    vertical_flip: vertical_flip 
+    random_rotate90: random_rotate90
+    shift_scale_rotate: shift_scale_rotate
+
+@dataclass (frozen=True)
+class TrainArguments:
+    lr_rate: float
+    weight_decay: float
+    batch_size: int
+    num_epochs: int
+    model: Model
+    augmentation: TrainAugmentation
+    loss_function: str
+    optimizer: str
+    normalize: normalize
+    transform_settings: transform_settings
+    device: str
 
 
+@dataclass 
+class InferenceAugmentation:
+    resize: resize
 
-@dataclass(frozen=True)
-class TrainingConfig:
-    root_dir: Path
-    trained_model_path: Path
-    updated_base_model_path: Path
-    training_data: Path
-    params_epochs: int
-    params_batch_size: int
-    params_is_augmentation: bool
-    params_image_size: list
-
-
-
-@dataclass(frozen=True)
-class EvaluationConfig:
-    path_of_model: Path
-    training_data: Path
-    all_params: dict
-    params_image_size: list
-    params_batch_size: int
+@dataclass (frozen=True)
+class InferenceArguments:
+    metrics_reduction: str
+    batch_size : int
+    augmentation: InferenceAugmentation
+    normalize: normalize
+    transform_settings: transform_settings
+    model_path:  Path
+    model_architecture: Model
+    device: str
